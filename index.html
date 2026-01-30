@@ -19,7 +19,7 @@
             padding-bottom: 50px; 
         }
 
-        /* Скляна шапка */
+        /* Адаптивна Glassmorphism шапка */
         header { 
             position: fixed; 
             top: 0; left: 0; right: 0; 
@@ -73,7 +73,7 @@
 
         .share-btn { display: block; width: 200px; margin: 30px auto; padding: 12px; background: transparent; border: 2px solid var(--accent); color: var(--accent); border-radius: 30px; font-weight: bold; cursor: pointer; text-align: center; }
 
-        /* Секція інструкцій БЕЗ капсу та БЕЗ міток */
+        /* Оновлений блок інструкцій: без капсу, без міток */
         .instructions { 
             margin: 30px auto; 
             max-width: 580px; 
@@ -85,12 +85,12 @@
 
         .instructions h3 { 
             color: var(--accent); 
-            font-size: 0.85rem; /* Ще менший шрифт */
+            font-size: 0.9rem; 
             margin-bottom: 20px; 
             text-align: center; 
-            text-transform: none; /* ПРИБРАНО КАПС */
-            letter-spacing: 0.5px;
-            font-weight: normal;
+            text-transform: none; /* Вимикає капс */
+            font-weight: 500; 
+            letter-spacing: normal;
         }
 
         .step { 
@@ -99,7 +99,7 @@
             padding: 15px; 
             border-radius: 12px; 
             font-size: 0.85rem;
-            border-left: none; /* ПРИБРАНО ЛІНІЮ */
+            border-left: none; /* Без фіолетової смужки */
         }
 
         .step b { color: white; }
@@ -166,7 +166,6 @@
 </div>
 
 <script>
-    // Логіка скролу для шапки
     window.onscroll = function() {
         const header = document.getElementById("mainHeader");
         if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
