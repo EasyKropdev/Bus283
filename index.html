@@ -10,7 +10,7 @@
 
     <style>
         :root { --bg: #121212; --card: #1e1e1e; --text: #e0e0e0; --accent: #bb86fc; --border: #333; }
-        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; padding-bottom: 30px; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; padding-bottom: 40px; }
         .container { max-width: 600px; margin: auto; background: var(--card); border-radius: 12px; overflow: hidden; }
         header { background: #252525; padding: 25px 15px; text-align: center; border-bottom: 2px solid var(--accent); }
         h1 { margin: 0; font-size: 2.2rem; font-style: italic; text-transform: uppercase; letter-spacing: 2px; color: white; margin-bottom: 20px; }
@@ -24,19 +24,30 @@
         .selected { background: #3700b3 !important; }
         .btn-cal { display: block; margin: 10px auto; padding: 10px 20px; background: var(--accent); color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; display: none; }
 
-        /* Стилі для постійного блоку підказки */
+        /* Блок встановлення */
         .pwa-info-box {
             margin: 20px auto;
             max-width: 580px;
             background: #2a2a2a;
             border: 1px solid var(--accent);
             border-radius: 12px;
-            padding: 15px;
+            padding: 20px;
             text-align: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
         .pwa-info-box p { margin: 0 0 10px 0; font-size: 0.95rem; color: white; line-height: 1.4; }
-        .pwa-info-box b { color: var(--accent); }
+        .btn-install {
+            background: white;
+            color: black;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-top: 10px;
+            cursor: pointer;
+            display: none; /* Показується тільки на Android, коли готово */
+            text-transform: uppercase;
+        }
     </style>
 </head>
 <body>
@@ -74,9 +85,10 @@
     </table>
 </div>
 
-<div class="pwa-info-box">
-    <p>📱 Щоб відкривати розклад одним натисканням:</p>
-    <p>Натисніть <b>три крапки</b> (або "Поділитися") та оберіть <b>"Додати на головний екран"</b>.</p>
+<div class="pwa-info-box" id="install-container">
+    <p>📱 <b>Додайте розклад на головний екран</b></p>
+    <p>Щоб відкривати розклад без браузера, натисніть кнопку нижче або через меню: "Додати на гол. екран".</p>
+    <button class="btn-install" id="installBtn">ВСТАНОВИТИ ЯРЛИК</button>
 </div>
 
 <script>
@@ -95,6 +107,27 @@
         const randomIndex = Math.floor(Math.random() * bibleVerses.length);
         document.getElementById('bible-quote').innerText = bibleVerses[randomIndex];
     };
+
+    // ЛОГІКА КНОПКИ ВСТАНОВЛЕННЯ (PWA)
+    let deferredPrompt;
+    const installBtn = document.getElementById('installBtn');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        installBtn.style.display = 'inline-block';
+    });
+
+    installBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') { installBtn.style.display = 'none'; }
+            deferredPrompt = null;
+        } else {
+            alert("Натисніть на іконку меню браузера та оберіть 'Додати на головний екран'");
+        }
+    });
 
     let activeTime = "";
     function selectTrip(time, el) {
@@ -131,6 +164,5 @@
         window.open(url);
     }
 </script>
-
 </body>
 </html>
