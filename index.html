@@ -6,7 +6,7 @@
     <title>Автобус 283</title>
     
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#bb86fc">
+    <meta name="theme-color" content="#121212">
 
     <style>
         :root { --bg: #121212; --card: #1e1e1e; --text: #e0e0e0; --accent: #bb86fc; --border: #333; }
@@ -30,11 +30,9 @@
         td { cursor: pointer; color: #fff; }
         .selected { background: #3700b3 !important; }
 
-        /* Кнопка Поділитися */
         .share-btn { display: block; width: 200px; margin: 20px auto; padding: 12px; background: transparent; border: 2px solid var(--accent); color: var(--accent); border-radius: 30px; font-weight: bold; cursor: pointer; text-align: center; transition: 0.3s; }
         .share-btn:active { background: var(--accent); color: #000; }
 
-        /* Секція інструкцій */
         .instructions { margin: 30px auto; max-width: 580px; padding: 15px; color: #bbb; font-size: 0.9rem; line-height: 1.6; border-top: 1px solid var(--border); }
         .instructions h3 { color: var(--accent); font-size: 1rem; margin-bottom: 10px; text-align: center; }
         .step { margin-bottom: 15px; background: #1a1a1a; padding: 10px; border-radius: 8px; }
@@ -90,23 +88,19 @@
 <div class="instructions">
     <h3>Як зберегти розклад на телефоні?</h3>
     <div class="step">
-        <b>Android (Chrome):</b> Натисніть на три крапки (⋮) у правому верхньому куті та оберіть <b>«Додати на головний екран»</b>.
+        <b>Android (Chrome):</b> Натисніть на три крапки (⋮) та оберіть <b>«Додати на головний екран»</b>.
     </div>
     <div class="step">
-        <b>iPhone (Safari):</b> Натисніть кнопку «Поділитися» (квадрат зі стрілкою вгору) та оберіть <b>«На початковий екран»</b>.
-    </div>
-    <div class="step">
-        <b>Закладка у браузері:</b> Натисніть на зірочку (☆) у меню браузера, щоб сайт завжди був у списку обраного.
+        <b>iPhone (Safari):</b> Кнопка «Поділитися» → <b>«На початковий екран»</b>.
     </div>
 </div>
 
 <script>
     const bibleVerses = [
         "«Промовляє до нього Ісус: Я — дорога, і правда, і життя. До Отця не приходить ніхто, якщо не через Мене» (Івана 14:6)",
-        "«Бо так полюбив Бог світ, що віддав Сина Свого Однородженого, щоб кожен, хто вірує в Нього, не загинув, а мав життя вічне» (Івана 3:16)",
+        "«Бо так полюбив Бог світ, що віддав Сина Свого...» (Івана 3:16)",
         "«Господь — то мій Пастир, тому в недостатку не буду» (Псалом 22:1)",
-        "«Все можу в Тім, Хто мене підкріпляє — у Христі Ісусі» (Филип'ян 4:13)",
-        "«А всім, що Його прийняли, їм владу дало дітьми Божими стати...» (Івана 1:12)"
+        "«Все можу в Тім, Хто мене підкріпляє...» (Филип'ян 4:13)"
     ];
 
     async function fetchWeather() {
@@ -123,7 +117,6 @@
             else if (temp < -2) wish = "❄️ На вулиці мороз. Одягайтеся тепліше!";
             else if (temp > 28) wish = "☀️ Спекотно. Візьміть пляшечку води.";
             else if (code >= 1 && code <= 3) wish = "☁️ Сьогодні хмарно. Гарної вам поїздки!";
-            else if (code === 0) wish = "☀️ Ясна погода. Нехай ваш шлях буде легким!";
 
             document.getElementById('wish-text').innerText = wish;
         } catch (e) {
@@ -135,11 +128,8 @@
         if (navigator.share) {
             navigator.share({
                 title: 'Розклад Автобуса 283',
-                text: 'Поглянь розклад автобуса 283 онлайн:',
                 url: window.location.href
-            }).catch(console.error);
-        } else {
-            alert("Скопіюйте посилання: " + window.location.href);
+            });
         }
     }
 
