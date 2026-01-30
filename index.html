@@ -56,9 +56,19 @@
         .quote-box { background: #2a2a2a; padding: 18px 25px; border-radius: 20px; border: 1px solid #444; margin: 20px auto; width: fit-content; max-width: 90%; box-sizing: border-box; }
         #bible-quote { font-style: italic; font-size: 0.95rem; color: white; margin: 0; line-height: 1.6; text-align: center; word-wrap: break-word; }
         
-        .weather-wish-box { padding: 10px; text-align: center; margin-bottom: 10px; }
+        .weather-wish-box { padding: 10px; text-align: center; margin-bottom: 5px; }
         #weather-info { font-weight: bold; color: var(--accent); margin-bottom: 5px; display: block; }
         #wish-text { color: #aaa; font-style: italic; font-size: 0.9rem; line-height: 1.4; display: block; }
+
+        /* Новий стиль для підказки напрямків */
+        .route-hint { 
+            text-align: center; 
+            color: #666; 
+            font-size: 0.75rem; 
+            margin-bottom: 15px; 
+            padding: 0 20px;
+            line-height: 1.4;
+        }
 
         #timer-block { 
             background: #252525; 
@@ -80,7 +90,7 @@
         .share-btn { display: block; width: 200px; margin: 30px auto; padding: 12px; background: transparent; border: 2px solid var(--accent); color: var(--accent); border-radius: 30px; font-weight: bold; cursor: pointer; text-align: center; }
 
         .instructions { margin: 30px auto; max-width: 580px; padding: 15px; color: #bbb; line-height: 1.6; border-top: 1px solid var(--border); }
-        .instructions h3 { color: var(--accent); font-size: 1.1rem; margin-bottom: 20px; text-align: center; text-transform: none; font-weight: 600; letter-spacing: normal; }
+        .instructions h3 { color: var(--accent); font-size: 1.1rem; margin-bottom: 20px; text-align: center; font-weight: 600; }
         .step { margin-bottom: 12px; background: #1a1a1a; padding: 15px; border-radius: 12px; font-size: 0.85rem; }
         .step b { color: white; }
 
@@ -101,6 +111,10 @@
     <div class="weather-wish-box">
         <span id="weather-info">Оновлення погоди...</span>
         <span id="wish-text">Гарної дороги!</span>
+    </div>
+
+    <div class="route-hint">
+        Лівий стовпчик — з Критого Ринку • Правий — із Созонівки
     </div>
 
     <div id="timer-block">
@@ -151,10 +165,7 @@
 </div>
 
 <script>
-    // ==========================================================
-    // ВЕРСІЯ САЙТУ: Змінюйте на "1.1", "1.2" і т.д. для оновлення кешу
     const SITE_VERSION = "1.0"; 
-    // ==========================================================
 
     function checkUpdates() {
         const savedVersion = localStorage.getItem('site_version');
