@@ -75,12 +75,23 @@ async function fetchWeather() {
         document.getElementById('weather-info').innerText = `Кропивницький: ${temp}°C`;
         
         let wish = "Гарної та благословенної дороги!";
-        if (code >= 51) wish = "☔️ Здається, дощить. Не забудьте парасольку!";
-        else if (temp < -2) wish = "❄️ На вулиці мороз. Вдягайтесь тепліше!";
-        else if (temp > 28) wish = "☀️ Спекотно. Візьміть пляшечку води.";
-        else if (code >= 1 && code <= 3) wish = "☁️ Сьогодні хмарно. Гарної вам поїздки!";
+        
+        if (code >= 51) {
+            wish = "☔️ На вулиці дощить. Не забудьте парасольку!";
+        } else if (temp < -2) {
+            wish = "❄️ На вулиці мороз. Одягайтеся тепліше!";
+        } else if (temp > 28) {
+            wish = "☀️ Сьогодні спекотно. Візьміть пляшечку води!";
+        } else if (code >= 1 && code <= 3) {
+            wish = "☁️ Сьогодні хмарно. Комфортної поїздки!";
+        } else {
+            wish = "Гарної та благословенної вам дороги!";
+        }
+        
         document.getElementById('wish-text').innerText = wish;
-    } catch (e) { document.getElementById('weather-info').innerText = "Погода оновлюється"; }
+    } catch (e) { 
+        document.getElementById('weather-info').innerText = "Погода оновлюється"; 
+    }
 }
 
 let activeTime = "";
@@ -109,7 +120,11 @@ function updateTimer(time) {
     if (window.tInt) clearInterval(window.tInt);
     window.tInt = setInterval(() => {
         const diff = target - new Date();
-        if (diff <= 0) { clearInterval(window.tInt); document.getElementById('countdown').innerText = "Рейс відійшов"; return; }
+        if (diff <= 0) { 
+            clearInterval(window.tInt); 
+            document.getElementById('countdown').innerText = "Рейс відійшов"; 
+            return; 
+        }
         const hrs = Math.floor(diff/3600000).toString().padStart(2,'0');
         const mns = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
         const scs = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
@@ -127,7 +142,11 @@ function addToCalendar() {
     const a = document.createElement('a'); a.href = url; a.download = 'bus283.ics'; a.click();
 }
 
-function shareApp() { if (navigator.share) navigator.share({ title: '283', url: window.location.href }); }
+function shareApp() { 
+    if (navigator.share) {
+        navigator.share({ title: 'Розклад 283', url: window.location.href });
+    } 
+}
 
 window.onscroll = function() {
     const header = document.getElementById("mainHeader");
