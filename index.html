@@ -58,27 +58,44 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         
-        .quote-box { background: #2a2a2a; padding: 15px 20px; border-radius: 20px; border: 1px solid #444; margin: 20px auto; width: fit-content; max-width: 90%; box-sizing: border-box; }
-        #bible-quote { font-style: italic; font-size: 0.95rem; color: white; margin: 0; line-height: 1.5; text-align: center; }
+        /* Гнучкий блок цитат */
+        .quote-box { 
+            background: #2a2a2a; 
+            padding: 18px 25px; 
+            border-radius: 20px; 
+            border: 1px solid #444; 
+            margin: 20px auto; 
+            width: fit-content; 
+            max-width: 90%; 
+            box-sizing: border-box; 
+            display: block; 
+        }
+        #bible-quote { 
+            font-style: italic; 
+            font-size: 0.95rem; 
+            color: white; 
+            margin: 0; 
+            line-height: 1.6; 
+            text-align: center; 
+            word-wrap: break-word; /* Щоб довгі слова не вилазили */
+        }
         
         .weather-wish-box { padding: 10px; text-align: center; margin-bottom: 10px; }
         #weather-info { font-weight: bold; color: var(--accent); margin-bottom: 5px; display: block; }
         #wish-text { color: #aaa; font-style: italic; font-size: 0.9rem; line-height: 1.4; display: block; }
 
-        /* Оновлений блок таймера: плавна поява без скачків */
         #timer-block { 
             background: #252525; 
-            padding: 15px; 
             text-align: center; 
             border-top: 2px solid var(--accent);
             opacity: 0;
             max-height: 0;
             overflow: hidden;
-            transition: all 0.4s ease-in-out; /* Плавність */
+            transition: all 0.4s ease-in-out;
         }
         #timer-block.visible {
             opacity: 1;
-            max-height: 120px; /* Висота при появі */
+            max-height: 130px; 
             padding: 15px;
         }
 
@@ -168,10 +185,11 @@
     };
 
     const bibleVerses = [
-        "«Промовляє до нього Ісус: Я — дорога, і правда, і життя...» (Івана 14:6)",
-        "«Бо так полюбив Бог світ, що віддав Сина Свого...» (Івана 3:16)",
-        "«Господь — то мій Пастир, тому в недостатку не буду» (Псалом 22:1)",
-        "«Все можу в Тім, Хто мене підкріпляє» (Филип'ян 4:13)"
+        "«Промовляє до нього Ісус: Я — дорога, і правда, і життя. До Отця не приходить ніхто, якщо не через Мене» (Івана 14:6)",
+        "«Бо так полюбив Бог світ, що віддав Сина Свого Однородженого, щоб кожен, хто вірує в Нього, не загинув, а мав життя вічне» (Івана 3:16)",
+        "«Господь — то мій Пастир, тому в недостатку не буду. Він на пасовиськах зелених оселить мене, на тихую воду мене запровадить!» (Псалом 22:1-2)",
+        "«Все можу в Тім, Хто мене підкріпляє — у Христі Ісусі» (Филип'ян 4:13)",
+        "«Бо Я знаю ті думки, які думаю про вас, — говорить Господь, — думки про спокій, а не про лихо, щоб дати вам будучність та надію» (Єремії 29:11)"
     ];
 
     async function fetchWeather() {
@@ -201,7 +219,7 @@
         el.classList.add('selected');
         
         const timerBlock = document.getElementById('timer-block');
-        timerBlock.classList.add('visible'); // Плавна поява
+        timerBlock.classList.add('visible');
         document.getElementById('calBtn').style.display = 'inline-block';
         updateTimer(time);
     }
@@ -209,7 +227,7 @@
     function deselectAll(event) {
         activeTime = "";
         document.querySelectorAll('td').forEach(t => t.classList.remove('selected'));
-        document.getElementById('timer-block').classList.remove('visible'); // Плавне зникнення
+        document.getElementById('timer-block').classList.remove('visible');
         if (window.tInt) clearInterval(window.tInt);
     }
 
