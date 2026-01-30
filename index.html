@@ -19,7 +19,7 @@
             padding-bottom: 50px; 
         }
 
-        /* Адаптивна Glassmorphism шапка */
+        /* Скляна шапка */
         header { 
             position: fixed; 
             top: 0; left: 0; right: 0; 
@@ -73,7 +73,7 @@
 
         .share-btn { display: block; width: 200px; margin: 30px auto; padding: 12px; background: transparent; border: 2px solid var(--accent); color: var(--accent); border-radius: 30px; font-weight: bold; cursor: pointer; text-align: center; }
 
-        /* Оновлений блок інструкцій згідно з фото */
+        /* Секція інструкцій БЕЗ капсу та БЕЗ міток */
         .instructions { 
             margin: 30px auto; 
             max-width: 580px; 
@@ -85,11 +85,12 @@
 
         .instructions h3 { 
             color: var(--accent); 
-            font-size: 0.95rem; 
+            font-size: 0.85rem; /* Ще менший шрифт */
             margin-bottom: 20px; 
             text-align: center; 
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            text-transform: none; /* ПРИБРАНО КАПС */
+            letter-spacing: 0.5px;
+            font-weight: normal;
         }
 
         .step { 
@@ -97,8 +98,8 @@
             background: #1a1a1a; 
             padding: 15px; 
             border-radius: 12px; 
-            font-size: 0.9rem;
-            border-left: none; /* Прибрано фіолетову лінію */
+            font-size: 0.85rem;
+            border-left: none; /* ПРИБРАНО ЛІНІЮ */
         }
 
         .step b { color: white; }
@@ -160,11 +161,12 @@
         <b>iPhone (Safari):</b> Кнопка «Поділитися» → <b>«На початковий екран»</b>.
     </div>
     <div class="step">
-        <b>Як зробити закладку?</b> У браузері натисніть на <b>значок зірочки (★)</b> або в меню оберіть <b>«Додати до закладок»</b>. Так ви знайдете розклад одним натисканням!
+        <b>Як зробити закладку?</b> У браузері натисніть на <b>зірочку (★)</b> або в меню оберіть <b>«Додати до закладок»</b>.
     </div>
 </div>
 
 <script>
+    // Логіка скролу для шапки
     window.onscroll = function() {
         const header = document.getElementById("mainHeader");
         if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
@@ -176,7 +178,7 @@
 
     const bibleVerses = [
         "«Промовляє до нього Ісус: Я — дорога, і правда, і життя. До Отця не приходить ніхто, якщо не через Мене» (Івана 14:6)",
-        "«Бо так полюбив Бог світ, що віддав Сина Свого Однородженого, щоб кожен, хто вірує в Нього, не загинув, а мав життя вічне» (Івана 3:16)",
+        "«Бо так полюбив Бог світ, що віддав Сина Свого...» (Івана 3:16)",
         "«Господь — то мій Пастир, тому в недостатку не буду» (Псалом 22:1)",
         "«Все можу в Тім, Хто мене підкріпляє — у Христі Ісусі» (Филип'ян 4:13)"
     ];
