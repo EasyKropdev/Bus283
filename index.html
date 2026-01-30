@@ -80,7 +80,7 @@
         .share-btn { display: block; width: 200px; margin: 30px auto; padding: 12px; background: transparent; border: 2px solid var(--accent); color: var(--accent); border-radius: 30px; font-weight: bold; cursor: pointer; text-align: center; }
 
         .instructions { margin: 30px auto; max-width: 580px; padding: 15px; color: #bbb; line-height: 1.6; border-top: 1px solid var(--border); }
-        .instructions h3 { color: var(--accent); font-size: 1.1rem; margin-bottom: 20px; text-align: center; font-weight: 600; }
+        .instructions h3 { color: var(--accent); font-size: 1.1rem; margin-bottom: 20px; text-align: center; text-transform: none; font-weight: 600; letter-spacing: normal; }
         .step { margin-bottom: 12px; background: #1a1a1a; padding: 15px; border-radius: 12px; font-size: 0.85rem; }
         .step b { color: white; }
 
@@ -139,8 +139,15 @@
 
 <div class="instructions" onclick="event.stopPropagation()">
     <h3>Як зберегти розклад на телефоні?</h3>
-    <div class="step"><b>Android (Chrome):</b> Натисніть на (⋮) та <b>«Додати на головний екран»</b>.</div>
-    <div class="step"><b>iPhone (Safari):</b> Кнопка «Поділитися» → <b>«На початковий екран»</b>.</div>
+    <div class="step">
+        <b>Android (Chrome):</b> Натисніть на три крапки (⋮) та оберіть <b>«Додати на головний екран»</b>.
+    </div>
+    <div class="step">
+        <b>iPhone (Safari):</b> Кнопка «Поділитися» → <b>«На початковий екран»</b>.
+    </div>
+    <div class="step">
+        <b>Як зробити закладку?</b> У браузері натисніть на <b>зірочку (★)</b> або в меню оберіть <b>«Додати до закладок»</b>.
+    </div>
 </div>
 
 <script>
@@ -235,7 +242,7 @@
         let start = new Date(); start.setHours(parseInt(h), parseInt(m), 0);
         let end = new Date(start.getTime() + 30 * 60000);
         const fmt = d => d.toISOString().replace(/-|:|\.\d+/g, '');
-        const icsData = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:Автобус 283\nDTSTART:${fmt(start)}\nDTEND:${fmt(end)}\nEND:VEVENT\nEND:VCALENDAR`;
+        const icsData = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:Автобус 283\nDTSTART:${fmt(start)}\nDTEND:${fmt(end)}\nDESCRIPTION:Пора виходити на зупинку!\nBEGIN:VALARM\nTRIGGER:-PT10M\nACTION:DISPLAY\nDESCRIPTION:Нагадування\nEND:VALARM\nEND:VEVENT\nEND:VCALENDAR`;
         const blob = new Blob([icsData], { type: 'text/calendar' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a'); a.href = url; a.download = 'bus283.ics'; a.click();
