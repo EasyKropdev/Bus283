@@ -2,28 +2,33 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Автобус 283</title>
     
-    <link rel="apple-touch-icon" href="icon.png">
-    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
     <link rel="manifest" href="manifest.json">
 
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
     <meta name="theme-color" content="#121212">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <style>
         :root { --bg: #121212; --card: #1e1e1e; --text: #e0e0e0; --accent: #bb86fc; --border: #333; }
         
+        /* Фікс білих пробілів та лагів */
+        html, body { 
+            background: #121212; 
+            margin: 0; 
+            padding: 0;
+            width: 100%;
+            overflow-x: hidden;
+            overscroll-behavior-y: contain; /* Забороняє «гумовий» ефект при скролі */
+        }
+
         body { 
             font-family: -apple-system, sans-serif; 
-            background: linear-gradient(180deg, #252525 0%, #121212 400px, #121212 100%);
-            background-attachment: fixed;
             color: var(--text); 
-            margin: 0; 
-            padding-bottom: 50px; 
+            padding-bottom: 60px; 
             min-height: 100vh;
         }
 
@@ -31,27 +36,28 @@
             position: fixed; 
             top: 0; left: 0; right: 0; 
             z-index: 1000;
-            background: rgba(18, 18, 18, 0.7); 
-            backdrop-filter: blur(20px); 
-            -webkit-backdrop-filter: blur(20px); 
+            background: rgba(18, 18, 18, 0.8); 
+            backdrop-filter: blur(15px); 
+            -webkit-backdrop-filter: blur(15px); 
             display: flex;
             align-items: center; justify-content: center;
-            height: 85px; 
+            height: 80px; 
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s;
+            transition: height 0.3s;
         }
 
-        h1 { margin: 0; font-size: 2.2rem; font-style: italic; text-transform: uppercase; letter-spacing: 2px; color: white; }
+        h1 { margin: 0; font-size: 2rem; font-style: italic; text-transform: uppercase; letter-spacing: 2px; color: white; }
         header.scrolled { height: 60px; }
-        header.scrolled h1 { font-size: 1.4rem; }
+        header.scrolled h1 { font-size: 1.3rem; }
 
         .container { 
             max-width: 600px; 
-            margin: 110px auto 20px auto; 
+            margin: 100px auto 20px auto; 
             background: var(--card); 
             border-radius: 12px; 
             overflow: hidden; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
         }
         
         .quote-box { background: #2a2a2a; padding: 18px 25px; border-radius: 20px; border: 1px solid #444; margin: 20px auto; width: fit-content; max-width: 90%; text-align: center; }
@@ -110,7 +116,7 @@
         #timer-block.visible { opacity: 1; max-height: 130px; padding: 15px; }
         #countdown { font-size: 1.6rem; color: var(--accent); font-weight: bold; display: block; margin-bottom: 10px; }
         
-        table { width: 100%; border-collapse: collapse; border-top: 2px solid var(--accent); }
+        table { width: 100%; border-collapse: collapse; border-top: 2px solid var(--accent); background: var(--card); }
         th, td { padding: 12px 5px; text-align: center; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); font-size: 0.85rem; }
         .route-label { background: rgba(255, 255, 255, 0.03); color: #888; font-size: 0.75rem; text-transform: uppercase; pointer-events: none; border-right: none; }
         td { cursor: pointer; color: #fff; transition: background 0.2s; }
@@ -154,7 +160,7 @@
     <table>
         <thead><tr><th>Пн — Пт</th><th>Сб — Нд</th></tr></thead>
         <tbody>
-            <tr><td colspan="2" class="route-label" id="label-main">Завантаження...</td></tr>
+            <tr><td colspan="2" class="route-label" id="label-main">Очікування...</td></tr>
         </tbody>
         <tbody id="schedule-body"></tbody>
     </table>
@@ -163,10 +169,10 @@
 <button class="share-btn" onclick="shareApp(); event.stopPropagation()">🔗 ПОДІЛИТИСЯ</button>
 
 <div class="instructions" onclick="event.stopPropagation()">
-    <h3>Як зберегти розклад на телефоні?</h3>
-    <div class="step"><b>Android (Chrome):</b> Натисніть на три крапки (⋮) та оберіть <b>«Додати на головний екран»</b>.</div>
-    <div class="step"><b>iPhone (Safari):</b> Кнопка «Поділитися» → <b>«На початковий екран»</b>.</div>
-    <div class="step"><b>Як зробити закладку?</b> У браузері натисніть на <b>зірочку (★)</b> або в меню оберіть <b>«Додати до закладок»</b>.</div>
+    <h3>Як зберегти на екрані?</h3>
+    <div class="step"><b>Android:</b> Три крапки (⋮) → <b>«Додати на головний екран»</b>.</div>
+    <div class="step"><b>iPhone:</b> «Поділитися» → <b>«На початковий екран»</b>.</div>
+    <div class="step"><b>Логотип:</b> Після додавання на екран ви побачите свій логотип.</div>
 </div>
 
 <script src="script.js"></script>
