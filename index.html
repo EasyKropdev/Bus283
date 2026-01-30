@@ -10,7 +10,7 @@
 
     <style>
         :root { --bg: #121212; --card: #1e1e1e; --text: #e0e0e0; --accent: #bb86fc; --border: #333; }
-        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; padding-bottom: 50px; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; padding-bottom: 40px; }
         .container { max-width: 600px; margin: auto; background: var(--card); border-radius: 12px; overflow: hidden; }
         header { background: #252525; padding: 25px 15px; text-align: center; border-bottom: 2px solid var(--accent); }
         h1 { margin: 0; font-size: 2.2rem; font-style: italic; text-transform: uppercase; letter-spacing: 2px; color: white; margin-bottom: 20px; }
@@ -23,25 +23,24 @@
         td { cursor: pointer; }
         .selected { background: #3700b3 !important; }
         
-        /* Стилі для кнопки розкладу та кнопки встановлення */
-        .btn-cal, .btn-install { 
+        .btn-cal, .btn-widget { 
             display: block; margin: 10px auto; padding: 12px 20px; 
             background: var(--accent); color: #000; border: none; 
             border-radius: 8px; font-weight: bold; cursor: pointer; 
         }
         .btn-cal { display: none; }
 
-        .pwa-info-box {
+        .widget-box {
             margin: 20px auto;
             max-width: 580px;
             background: #2a2a2a;
-            border: 1px solid var(--accent);
-            border-radius: 12px;
+            border: 2px solid var(--accent);
+            border-radius: 15px;
             padding: 20px;
             text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
-        .pwa-info-box p { margin: 0 0 15px 0; font-size: 0.95rem; color: white; }
+        .widget-box p { margin: 0 0 10px 0; color: white; font-size: 0.95rem; }
     </style>
 </head>
 <body>
@@ -79,17 +78,37 @@
     </table>
 </div>
 
-<div class="pwa-info-box">
-    <p>📱 Відкривайте розклад миттєво з робочого столу:</p>
-    <button class="btn-install" id="installBtn">ЗБЕРЕГТИ ЯК ЯРЛИК</button>
+<div class="widget-box">
+    <p><b>✨ Швидкий доступ (Віджет)</b></p>
+    <p style="font-size: 0.85rem; color: #aaa; margin-bottom: 15px;">Додайте іконку 283 на головний екран, щоб не шукати посилання.</p>
+    <button class="btn-widget" onclick="showWidgetGuide()">ДОДАТИ ВІДЖЕТ</button>
 </div>
 
 <script>
-    // Код для цитат
-    const bibleVerses = ["«Промовляє до нього Ісус: Я — дорога, і правда, і життя...» (Івана 14:6)", "«І нема ні в кім іншім спасіння...» (Дії 4:12)", "«Бо так полюбив Бог світ...» (Івана 3:16)", "«Бо заплата за гріх — смерть...» (Римлян 6:23)", "«Бо коли ти устами своїми визнаватимеш Ісуса...» (Римлян 10:9)"];
-    window.onload = () => { document.getElementById('bible-quote').innerText = bibleVerses[Math.floor(Math.random() * bibleVerses.length)]; };
+    const bibleVerses = [
+        "«Промовляє до нього Ісус: Я — дорога, і правда, і життя...» (Івана 14:6)",
+        "«І нема ні в кім іншім спасіння...» (Дії 4:12)",
+        "«Бо так полюбив Бог світ...» (Івана 3:16)",
+        "«Бо заплата за гріх — смерть...» (Римлян 6:23)",
+        "«Бо коли ти устами своїми визнаватимеш Ісуса...» (Римлян 10:9)",
+        "«Бо один є Бог, і один Посередник...» (1 Тимофія 2:5)",
+        "«А всім, що Його прийняли, їм владу дало дітьми Божими стати...» (Івана 1:12)",
+        "«Хто вірує в Сина, той має вічне життя...» (Івана 3:36)"
+    ];
 
-    // Код для таймера та календаря
+    window.onload = () => {
+        document.getElementById('bible-quote').innerText = bibleVerses[Math.floor(Math.random() * bibleVerses.length)];
+    };
+
+    function showWidgetGuide() {
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        if (isIOS) {
+            alert("Для iPhone:\n1. Натисніть кнопку 'Поділитися' (внизу екрана).\n2. Оберіть 'Додати на початковий екран'.");
+        } else {
+            alert("Для Android:\n1. Натисніть на три крапки (⋮) у куті браузера.\n2. Оберіть 'Додати на головний екран'.");
+        }
+    }
+
     let activeTime = "";
     function selectTrip(time, el) {
         activeTime = time;
@@ -99,6 +118,7 @@
         document.getElementById('calBtn').style.display = 'inline-block';
         updateTimer(time);
     }
+
     function updateTimer(time) {
         const [h, m] = time.split(':');
         let target = new Date(); target.setHours(parseInt(h), parseInt(m), 0);
@@ -110,34 +130,19 @@
             const hrs = Math.floor(diff/3600000).toString().padStart(2,'0');
             const mns = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
             const scs = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
-            document.getElementById('countdown').innerText = `${hrs}:${mns}:${scs}`;
+            document.getElementById('countdown').innerText = hrs+":"+mns+":"+scs;
         }, 1000);
     }
+
     function addToCalendar() {
         const [h, m] = activeTime.split(':');
-        const start = new Date(); start.setHours(h, m);
+        const now = new Date();
+        const start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m);
         const end = new Date(start.getTime() + 20*60000);
         const fmt = (d) => d.toISOString().replace(/-|:|\.\d\d\d/g, "");
-        window.open(`data:text/calendar;charset=utf8,BEGIN:VCALENDAR%0AVERSION:2.0%0ABEGIN:VEVENT%0ADTSTART:${fmt(start)}%0ADTEND:${fmt(end)}%0ASUMMARY:Автобус 283%0AEND:VEVENT%0AEND:VCALENDAR`);
+        const url = `data:text/calendar;charset=utf8,BEGIN:VCALENDAR%0AVERSION:2.0%0ABEGIN:VEVENT%0ADTSTART:${fmt(start)}%0ADTEND:${fmt(end)}%0ASUMMARY:Автобус 283%0AEND:VEVENT%0AEND:VCALENDAR`;
+        window.open(url);
     }
-
-    // --- ЛОГІКА КНОПКИ ВСТАНОВЛЕННЯ ---
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-    });
-
-    document.getElementById('installBtn').addEventListener('click', async () => {
-        if (deferredPrompt) {
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            if (outcome === 'accepted') deferredPrompt = null;
-        } else {
-            // Якщо браузер не підтримує авто-виклик (наприклад iPhone або Safari)
-            alert("Натисніть кнопку 'Поділитися' (внизу екрана) та оберіть 'Додати на початковий екран'.");
-        }
-    });
 </script>
 </body>
 </html>
