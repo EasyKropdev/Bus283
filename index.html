@@ -56,21 +56,9 @@
         .quote-box { background: #2a2a2a; padding: 18px 25px; border-radius: 20px; border: 1px solid #444; margin: 20px auto; width: fit-content; max-width: 90%; box-sizing: border-box; }
         #bible-quote { font-style: italic; font-size: 0.95rem; color: white; margin: 0; line-height: 1.6; text-align: center; word-wrap: break-word; }
         
-        .weather-wish-box { padding: 10px; text-align: center; margin-bottom: 5px; }
+        .weather-wish-box { padding: 10px; text-align: center; margin-bottom: 20px; }
         #weather-info { font-weight: bold; color: var(--accent); margin-bottom: 5px; display: block; }
         #wish-text { color: #aaa; font-style: italic; font-size: 0.9rem; line-height: 1.4; display: block; }
-
-        /* Новий стиль для підказки напрямків */
-        .route-hint { 
-            text-align: center; 
-            color: #666; 
-            font-size: 0.90rem; 
-            marging-top: 25px;
-            margin-bottom: 30px; 
-            padding: 0 20px;
-            line-height: 1.4;
-            latter-spacing: 0.5px;
-        }
 
         #timer-block { 
             background: #252525; 
@@ -86,6 +74,17 @@
         
         table { width: 100%; border-collapse: collapse; border-top: 2px solid var(--accent); }
         th, td { padding: 12px 5px; text-align: center; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); font-size: 0.85rem; }
+        
+        /* Стиль для нового рядка з напрямком */
+        .route-label { 
+            background: rgba(255, 255, 255, 0.03); 
+            color: #888; 
+            font-size: 0.7rem; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px;
+            pointer-events: none; /* Щоб не вибиралося як рейс */
+        }
+
         td { cursor: pointer; color: #fff; transition: background 0.2s; }
         .selected { background: #3700b3 !important; }
 
@@ -115,10 +114,6 @@
         <span id="wish-text">Гарної дороги!</span>
     </div>
 
-    <div class="route-hint">
-        Лівий стовпчик — виїзд з Критого Ринку • Правий — виїзд із Созонівки
-    </div>
-
     <div id="timer-block">
         <span id="countdown">00:00:00</span>
         <button class="btn-cal" id="calBtn" onclick="addToCalendar()">📅 Нагадати</button>
@@ -132,6 +127,10 @@
             </tr>
         </thead>
         <tbody>
+            <tr>
+                <td class="route-label">Критий Ринок — Созонівка</td>
+                <td class="route-label">Критий Ринок — Созонівка</td>
+            </tr>
             <tr><td onclick="selectTrip('06:00', this, event)">06:00 — 06:30</td><td onclick="selectTrip('06:30', this, event)">06:30 — 07:10</td></tr>
             <tr><td onclick="selectTrip('06:30', this, event)">06:30 — 07:10</td><td onclick="selectTrip('07:30', this, event)">07:30 — 08:10</td></tr>
             <tr><td onclick="selectTrip('07:00', this, event)">07:00 — 07:40</td><td onclick="selectTrip('08:50', this, event)">08:50 — 09:30</td></tr>
@@ -181,9 +180,9 @@
 
     window.onscroll = function() {
         const header = document.getElementById("mainHeader");
-        if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+        if (header && (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50)) {
             header.classList.add("scrolled");
-        } else {
+        } else if (header) {
             header.classList.remove("scrolled");
         }
     };
