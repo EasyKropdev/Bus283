@@ -1,14 +1,14 @@
 {
   "short_name": "Автобус 283",
-  "name": "Розклад автобуса 283",
+  "name": "Розклад маршруту 283",
   "icons": [
     {
-      "src": "icon.png",
+      "src": "logo.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "icon.png",
+      "src": "logo.png",
       "sizes": "512x512",
       "type": "image/png"
     }
