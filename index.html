@@ -73,10 +73,34 @@
 
         .share-btn { display: block; width: 200px; margin: 30px auto; padding: 12px; background: transparent; border: 2px solid var(--accent); color: var(--accent); border-radius: 30px; font-weight: bold; cursor: pointer; text-align: center; }
 
-        /* Оновлений блок інструкцій */
-        .instructions { margin: 30px auto; max-width: 580px; padding: 15px; color: #bbb; font-size: 0.9rem; line-height: 1.6; border-top: 1px solid var(--border); }
-        .instructions h3 { color: var(--accent); font-size: 1.1rem; margin-bottom: 15px; text-align: center; }
-        .step { margin-bottom: 15px; background: #1a1a1a; padding: 12px; border-radius: 10px; border-left: 3px solid var(--accent); }
+        /* Оновлений блок інструкцій згідно з фото */
+        .instructions { 
+            margin: 30px auto; 
+            max-width: 580px; 
+            padding: 15px; 
+            color: #bbb; 
+            line-height: 1.6; 
+            border-top: 1px solid var(--border); 
+        }
+
+        .instructions h3 { 
+            color: var(--accent); 
+            font-size: 0.95rem; 
+            margin-bottom: 20px; 
+            text-align: center; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .step { 
+            margin-bottom: 12px; 
+            background: #1a1a1a; 
+            padding: 15px; 
+            border-radius: 12px; 
+            font-size: 0.9rem;
+            border-left: none; /* Прибрано фіолетову лінію */
+        }
+
         .step b { color: white; }
 
         .btn-cal { padding: 10px 20px; background: var(--accent); color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; display: none; margin: 0 auto; }
@@ -128,7 +152,7 @@
 <button class="share-btn" onclick="shareApp()">🔗 ПОДІЛИТИСЯ</button>
 
 <div class="instructions">
-    <h3>Корисні поради:</h3>
+    <h3>Як зберегти розклад на телефоні?</h3>
     <div class="step">
         <b>Android (Chrome):</b> Натисніть на три крапки (⋮) та оберіть <b>«Додати на головний екран»</b>.
     </div>
@@ -136,7 +160,7 @@
         <b>iPhone (Safari):</b> Кнопка «Поділитися» → <b>«На початковий екран»</b>.
     </div>
     <div class="step">
-        <b>Як зробити закладку?</b> У браузері натисніть на <b>значок зірочки (☆)</b> або в меню оберіть <b>«Додати до закладок»</b>. Так ви знайдете розклад одним натисканням!
+        <b>Як зробити закладку?</b> У браузері натисніть на <b>значок зірочки (★)</b> або в меню оберіть <b>«Додати до закладок»</b>. Так ви знайдете розклад одним натисканням!
     </div>
 </div>
 
