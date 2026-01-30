@@ -10,7 +10,7 @@
 
     <style>
         :root { --bg: #121212; --card: #1e1e1e; --text: #e0e0e0; --accent: #bb86fc; --border: #333; }
-        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; padding-bottom: 30px; }
         .container { max-width: 600px; margin: auto; background: var(--card); border-radius: 12px; overflow: hidden; }
         header { background: #252525; padding: 25px 15px; text-align: center; border-bottom: 2px solid var(--accent); }
         h1 { margin: 0; font-size: 2.2rem; font-style: italic; text-transform: uppercase; letter-spacing: 2px; color: white; margin-bottom: 20px; }
@@ -24,21 +24,19 @@
         .selected { background: #3700b3 !important; }
         .btn-cal { display: block; margin: 10px auto; padding: 10px 20px; background: var(--accent); color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; display: none; }
 
-        /* Стилі для вікна-підказки */
-        #pwa-prompt { 
-            display: none; 
-            position: fixed; 
-            bottom: 20px; 
-            left: 10px; 
-            right: 10px; 
-            background: #2a2a2a; 
-            border: 2px solid var(--accent); 
-            border-radius: 15px; 
-            padding: 15px; 
-            z-index: 1000; 
-            box-shadow: 0 5px 20px rgba(0,0,0,0.8);
+        /* Стилі для постійного блоку підказки */
+        .pwa-info-box {
+            margin: 20px auto;
+            max-width: 580px;
+            background: #2a2a2a;
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            padding: 15px;
             text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
+        .pwa-info-box p { margin: 0 0 10px 0; font-size: 0.95rem; color: white; line-height: 1.4; }
+        .pwa-info-box b { color: var(--accent); }
     </style>
 </head>
 <body>
@@ -47,7 +45,7 @@
     <header>
         <h1>АВТОБУС 283</h1>
         <div class="quote-box">
-            <div id="bible-quote">Завантаження цитати...</div>
+            <div id="bible-quote">Завантаження...</div>
         </div>
     </header>
     <div id="timer-block">
@@ -76,9 +74,9 @@
     </table>
 </div>
 
-<div id="pwa-prompt">
-    <p style="margin:0 0 10px 0; font-size:0.9rem; color:white;">Щоб не шукати посилання, додайте розклад на головний екран.</p>
-    <button onclick="closePrompt()" style="background:var(--accent); border:none; padding:8px 15px; border-radius:5px; font-weight:bold; cursor:pointer; color: black;">Зрозуміло</button>
+<div class="pwa-info-box">
+    <p>📱 Щоб відкривати розклад одним натисканням:</p>
+    <p>Натисніть <b>три крапки</b> (або "Поділитися") та оберіть <b>"Додати на головний екран"</b>.</p>
 </div>
 
 <script>
@@ -97,21 +95,6 @@
         const randomIndex = Math.floor(Math.random() * bibleVerses.length);
         document.getElementById('bible-quote').innerText = bibleVerses[randomIndex];
     };
-
-    // Функція показу вікна при прокрутці до кінця
-    window.onscroll = function() {
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50) {
-            // Показуємо лише якщо користувач не закрив його раніше
-            if (!localStorage.getItem('pwaPromptHidden')) {
-                document.getElementById('pwa-prompt').style.display = 'block';
-            }
-        }
-    };
-
-    function closePrompt() {
-        document.getElementById('pwa-prompt').style.display = 'none';
-        localStorage.setItem('pwaPromptHidden', 'true');
-    }
 
     let activeTime = "";
     function selectTrip(time, el) {
