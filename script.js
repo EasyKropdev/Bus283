@@ -1,4 +1,4 @@
-const SITE_VERSION = "2.3"; 
+const SITE_VERSION = "2.4"; 
 
 const schedule = [
     { wd: "06:00 — 06:30", we: "06:30 — 07:10" },
@@ -19,11 +19,9 @@ const schedule = [
 ];
 
 function checkUpdates() {
-    // Відображаємо версію в кутку сторінки
     if (document.getElementById('verDisplay')) {
         document.getElementById('verDisplay').innerText = "v" + SITE_VERSION;
     }
-
     const savedVersion = localStorage.getItem('site_version');
     if (savedVersion && savedVersion !== SITE_VERSION) {
         localStorage.setItem('site_version', SITE_VERSION);
@@ -31,36 +29,6 @@ function checkUpdates() {
     } else {
         localStorage.setItem('site_version', SITE_VERSION);
     }
-}
-
-function setMode(mode) {
-    const switcher = document.getElementById('switcher');
-    if (switcher) switcher.setAttribute('data-mode', mode);
-
-    document.getElementById('btn-market').classList.toggle('active', mode === 'market');
-    document.getElementById('btn-sozonivka').classList.toggle('active', mode === 'sozonivka');
-    
-    const label = (mode === 'market') ? "Критий Ринок — Созонівка" : "Созонівка — Критий Ринок";
-    document.getElementById('label-main').innerText = label;
-
-    const body = document.getElementById('schedule-body');
-    body.innerHTML = '';
-
-    schedule.forEach(row => {
-        const tr = document.createElement('tr');
-        [row.wd, row.we].forEach(val => {
-            const td = document.createElement('td');
-            if (val) {
-                const parts = val.split(' — ');
-                const displayTime = (mode === 'market') ? parts[0] : parts[1];
-                td.innerText = displayTime;
-                td.onclick = (e) => selectTrip(displayTime, td, e);
-            } else { td.innerText = '-'; }
-            tr.appendChild(td);
-        });
-        body.appendChild(tr);
-    });
-    deselectAll();
 }
 
 const bibleVerses = [
@@ -78,33 +46,59 @@ async function fetchWeather() {
         const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=48.50&longitude=32.26&current_weather=true&timezone=auto');
         const dw = await res.json();
         const temp = Math.round(dw.current_weather.temperature);
-        const code = dw.current_weather.weathercode;
+        const code = parseInt(dw.current_weather.weathercode);
         
         document.getElementById('weather-info').innerText = `Кропивницький: ${temp}°C`;
         
         let wish = "Гарної та благословенної дороги!";
         
-        // ВИПРАВЛЕНА ЛОГІКА: Спочатку перевіряємо коди опадів (WMO codes)
+        // Перевірка умов по черзі
         if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) {
             wish = "☔️ На вулиці дощить. Не забудьте парасольку!";
         } else if ((code >= 71 && code <= 77) || (code >= 85 && code <= 86)) {
-            wish = "❄️ На вулиці сніг. Будьте обережні та одягайтеся тепліше!";
+            wish = "❄️ На вулиці сніг. Одягайтеся тепліше!";
         } else if (code >= 95) {
             wish = "⛈ Обережно, прогнозується гроза!";
-        } else if (temp < -2) {
+        } else if (temp <= -1) {
             wish = "❄️ На вулиці мороз. Одягайтеся тепліше!";
-        } else if (temp > 28) {
+        } else if (temp >= 28) {
             wish = "☀️ Сьогодні спекотно. Візьміть пляшечку води!";
+        } else if (code === 0) {
+            wish = "☀️ Сьогодні ясно. Бажаємо чудової подорожі!";
         } else if (code >= 1 && code <= 3) {
             wish = "☁️ Сьогодні хмарно. Комфортної поїздки!";
-        } else {
-            wish = "Гарної та благословенної вам дороги!";
         }
         
         document.getElementById('wish-text').innerText = wish;
     } catch (e) { 
         document.getElementById('weather-info').innerText = "Погода оновлюється"; 
     }
+}
+
+function setMode(mode) {
+    const switcher = document.getElementById('switcher');
+    if (switcher) switcher.setAttribute('data-mode', mode);
+    document.getElementById('btn-market').classList.toggle('active', mode === 'market');
+    document.getElementById('btn-sozonivka').classList.toggle('active', mode === 'sozonivka');
+    const label = (mode === 'market') ? "Критий Ринок — Созонівка" : "Созонівка — Критий Ринок";
+    document.getElementById('label-main').innerText = label;
+    const body = document.getElementById('schedule-body');
+    body.innerHTML = '';
+    schedule.forEach(row => {
+        const tr = document.createElement('tr');
+        [row.wd, row.we].forEach(val => {
+            const td = document.createElement('td');
+            if (val) {
+                const parts = val.split(' — ');
+                const displayTime = (mode === 'market') ? parts[0] : parts[1];
+                td.innerText = displayTime;
+                td.onclick = (e) => selectTrip(displayTime, td, e);
+            } else { td.innerText = '-'; }
+            tr.appendChild(td);
+        });
+        body.appendChild(tr);
+    });
+    deselectAll();
 }
 
 let activeTime = "";
