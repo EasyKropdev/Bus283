@@ -54,15 +54,15 @@
             position: fixed; 
             top: 0; left: 0; right: 0; 
             z-index: 1000;
+            background: rgba(18, 18, 18, 0.8); 
+            backdrop-filter: blur(20px);
             padding-top: env(safe-area-inset-top);
-            background: rgba(18, 18, 18, 0.7); 
-            backdrop-filter: blur(20px); 
+            height: auto;
             -webkit-backdrop-filter: blur(20px); 
             display: flex;
             align-items: center; justify-content: center;
-            height: auto; 
-            min-height: 85px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            min-height: 85px;
             /* Плавна зміна висоти */
             transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             will-change: height;
@@ -82,8 +82,7 @@
         }
 
         header.scrolled { 
-            height: 60px; 
-            padding-top: env(safe-area-inset-top);
+            padding-bottom: 8px;
         }
 
         header.scrolled h1 { 
