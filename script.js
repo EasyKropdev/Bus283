@@ -143,11 +143,18 @@ function shareApp() {
 }
 
 window.onscroll = function() {
+    let scroll = window.pageYOffset || document.documentElement.scrollTop;
+    
+    // 0.05 - це дуже плавне, благородне обертання  
+    document.documentElement.style.setProperty('--angle-1', (scroll * 2) + 'deg');
+    document.documentElement.style.setProperty('--angle-2', (scroll * -0.8) + 'deg');
+    // Твоя логіка хедера залишається без змін
     const header = document.getElementById("mainHeader");
-    const offset = window.pageYOffset || document.documentElement.scrollTop;
-    // Збільшений поріг для стабільності
-    if (offset > 80) header.classList.add("scrolled");
-    else header.classList.remove("scrolled");
+    if (scroll > 50) {
+        header.classList.add("scrolled");
+    } else {
+        header.classList.remove("scrolled");
+    }
 };
 
 window.onload = function() {
