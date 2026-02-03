@@ -11,7 +11,7 @@
   gtag('config', 'G-8JYQXTCDHH');
 </script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no", viewport-fit=cover">
     <title>Автобус 283</title>
     
     <link rel="apple-touch-icon" href="logo_v2.png">
@@ -58,8 +58,11 @@
             backdrop-filter: blur(20px); 
             -webkit-backdrop-filter: blur(20px); 
             display: flex;
-            align-items: center; justify-content: center;
-            height: 100px; 
+            align-items: center;
+            justify-content: center;
+            padding-top: env(safe-area-inset-top);
+            height: auto; 
+            min-height: 85px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             will-change: height;
