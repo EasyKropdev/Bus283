@@ -308,26 +308,38 @@
             color: #cfcfcf;
             border: 1px solid rgba(255, 255, 255, 0.089);
             padding: 8px 20px 10px 20px;
-            border-radius: 10px;
-            /* Робимо її максимально заокругленою */
+            /* Текст піднято (8 зверху, 10 знизу) */
+            border-radius: 12px;
+            /* Тепер справді заокруглена */
+
             font-weight: normal;
             text-transform: none;
             font-size: 0.8rem;
             letter-spacing: 1px;
             cursor: pointer;
-            transition: all 0.4s ease;
+
+            /* Пружиниста анімація повернення */
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
         #timer-block button:hover {
             background: rgba(143, 143, 143, 0.15);
             transform: translateY(-2px);
+            /* Легкий підйом */
             border-color: rgba(255, 255, 255, 0.4);
         }
 
         #timer-block button:active {
-            transform: scale(0.95);
+            /* Додаємо translateY(0), щоб скасувати підйом від hover під час кліку */
+            transform: scale(0.95) translateY(0);
+            background: rgba(255, 255, 255, 0.2);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+
+            /* Миттєве стискання */
+            transition: transform 0.1s ease-out;
         }
 
         table {
@@ -436,24 +448,32 @@
             font-weight: bold;
             cursor: pointer;
             text-align: center;
-
-            /* --- АНІМАЦІЯ --- */
-            position: relative;
-            overflow: hidden;
-            /* Щоб відблиск не виходив за краї */
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             text-transform: uppercase;
             letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+
+            /* --- ОНОВЛЕНА АНІМАЦІЯ --- */
+            /* Швидкий відгук (0.1s) на клік, але плавне пружинисте повернення (0.4s) */
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                background 0.3s ease;
+
+            /* Обов'язково для телефонів */
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
 
         /* Ефект при натисканні (Мобільні + ПК) */
         .share-btn:active {
-            transform: scale(0.95);
-            /* Кнопка приємно стискається */
+            /* Зменшуємо трохи сильніше для помітності на тачскріні */
+            transform: scale(0.94);
             background: rgba(187, 134, 252, 0.2);
+
+            /* Миттєве стискання при дотику */
+            transition: transform 0.1s ease-out;
         }
 
-        /* Бігучий відблиск */
+        /* Бігучий відблиск (залишаємо без змін, він крутий) */
         .share-btn::after {
             content: "";
             position: absolute;
