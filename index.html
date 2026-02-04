@@ -453,6 +453,7 @@
             position: relative;
             overflow: hidden;
             will-change: transform;
+            touch-action: manipulation;
 
             /* --- ВИПРАВЛЕНИЙ TRANSITION (в один рядок через кому) --- */
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s ease;
@@ -469,9 +470,9 @@
 
         /* Ефект при натисканні (Мобільні + ПК) */
         .share-btn:active {
-            transform: scale(0.92) !important;
+            transform: scale(0.95) !important;
             background: rgba(187, 134, 252, 0.25) !important;
-            transition: transform 0.05s ease-out !important;
+            transition: transform 0s ease-out !important;
         }
 
         /* Бігучий відблиск */
