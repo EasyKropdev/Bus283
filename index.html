@@ -328,6 +328,8 @@
             border-top: 2px solid var(--accent);
             width: 100%;
             border-collapse: collapse;
+            border-bottom: none !important;
+            /* Прибираємо межу самої таблиці */
         }
 
         th,
@@ -335,13 +337,22 @@
             padding: 12px 5px;
             text-align: center;
             border-bottom: 1px solid var(--border);
+            /* Це створює лінії між рядками */
             border-right: 1px solid var(--border);
             font-size: 0.85rem;
+            -webkit-tap-highlight-color: transparent;
+            /* Щоб не було синього спалаху */
         }
 
+        /* Прибираємо вертикальну лінію у останньої колонки */
         th:last-child,
         td:last-child {
             border-right: none;
+        }
+
+        /* КРИТИЧНО ВАЖЛИВО: Прибираємо горизонтальну лінію у останнього рядка */
+        tr:last-child td {
+            border-bottom: none !important;
         }
 
         .route-label {
@@ -402,6 +413,17 @@
             border-top: 1px solid var(--border);
             position: relative;
             z-index: 10;
+        }
+
+        /* Обмеження ширини для ПК (екрани більше 600px) */
+        @media (min-width: 600px) {
+            .instructions {
+                max-width: 450px;
+                /* Робимо блок вужчим, щоб він відповідав ширині таблиці */
+                margin-left: auto;
+                margin-right: auto;
+                padding: 0;
+            }
         }
 
         .instructions h3 {
