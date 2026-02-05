@@ -1,4 +1,4 @@
-const SITE_VERSION = "2.5"; 
+const SITE_VERSION = "2.5";
 
 const schedule = [
     { wd: "06:00 — 06:30", we: "06:30 — 07:10" },
@@ -57,20 +57,24 @@ async function fetchWeather() {
         else if (code === 0) wish = "☀️ Сьогодні ясно. Бажаємо чудової подорожі!";
         else if (code >= 1 && code <= 3) wish = "☁️ Сьогодні хмарно. Комфортної поїздки!";
         document.getElementById('wish-text').innerText = wish;
-    } catch (e) { 
-        document.getElementById('weather-info').innerText = "Погода оновлюється"; 
+    } catch (e) {
+        document.getElementById('weather-info').innerText = "Погода оновлюється";
     }
 }
 
 function setMode(mode) {
     const switcher = document.getElementById('switcher');
     if (switcher) switcher.setAttribute('data-mode', mode);
+
     document.getElementById('btn-market').classList.toggle('active', mode === 'market');
     document.getElementById('btn-sozonivka').classList.toggle('active', mode === 'sozonivka');
+
     const label = (mode === 'market') ? "Критий Ринок — Созонівка" : "Созонівка — Критий Ринок";
     document.getElementById('label-main').innerText = label;
+
     const body = document.getElementById('schedule-body');
     body.innerHTML = '';
+
     schedule.forEach(row => {
         const tr = document.createElement('tr');
         [row.wd, row.we].forEach(val => {
@@ -79,8 +83,10 @@ function setMode(mode) {
                 const parts = val.split(' — ');
                 const displayTime = (mode === 'market') ? parts[0] : parts[1];
                 td.innerText = displayTime;
-                td.onclick = (e) => selectTrip(displayTime, td, e);
-            } else { td.innerText = '-'; }
+                td.addEventListener('click', (e) => selectTrip(displayTime, td, e));
+            } else {
+                td.innerText = '-';
+            }
             tr.appendChild(td);
         });
         body.appendChild(tr);
@@ -93,73 +99,137 @@ function selectTrip(time, el, event) {
     if (time === '-') return;
     event.stopPropagation();
     activeTime = time;
+
     document.querySelectorAll('td').forEach(t => t.classList.remove('selected'));
     el.classList.add('selected');
-    document.getElementById('timer-block').classList.add('visible');
-    document.getElementById('calBtn').style.display = 'inline-block';
+
+    const timerBlock = document.getElementById('timer-block');
+    timerBlock.classList.add('visible');
+
+    const calBtn = document.getElementById('calBtn');
+    calBtn.style.display = 'inline-block';
+
     updateTimer(time);
 }
 
-function deselectAll() {
+function deselectAll(event) {
+    if (event && event.target) {
+        // Якщо клікнули по кнопці поділитися, таймеру або таблиці — не закриваємо
+        if (event.target.closest('#timer-block, td, .sw-btn, .share-btn, #calBtn')) {
+            return;
+        }
+    }
+
     activeTime = "";
     document.querySelectorAll('td').forEach(t => t.classList.remove('selected'));
-    document.getElementById('timer-block').classList.remove('visible');
-    if (window.tInt) clearInterval(window.tInt);
+
+    const tb = document.getElementById('timer-block');
+    if (tb) tb.classList.remove('visible');
+
+    if (window.tInt) {
+        clearInterval(window.tInt);
+        window.tInt = null;
+    }
 }
 
 function updateTimer(time) {
     const [h, m] = time.split(':');
-    let target = new Date(); target.setHours(parseInt(h), parseInt(m), 0);
+    let target = new Date();
+    target.setHours(parseInt(h), parseInt(m), 0, 0);
     if (target < new Date()) target.setDate(target.getDate() + 1);
     if (window.tInt) clearInterval(window.tInt);
+
+    const timerDisplay = document.getElementById('countdown');
     window.tInt = setInterval(() => {
         const diff = target - new Date();
-        if (diff <= 0) { 
-            clearInterval(window.tInt); 
-            document.getElementById('countdown').innerText = "Рейс відійшов"; 
-            return; 
+        if (diff <= 0) {
+            clearInterval(window.tInt);
+            timerDisplay.innerText = "Рейс відійшов";
+            return;
         }
-        const hrs = Math.floor(diff/3600000).toString().padStart(2,'0');
-        const mns = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
-        const scs = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
-        document.getElementById('countdown').innerText = "До рейсу: " + hrs+":"+mns+":"+scs;
+        const hrs = Math.floor(diff / 3600000).toString().padStart(2, '0');
+        const mns = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
+        const scs = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
+        timerDisplay.innerText = `До рейсу: ${hrs}:${mns}:${scs}`;
     }, 1000);
 }
 
-function addToCalendar() {
+function addToCalendar(event) {
     if (!activeTime) return;
-    
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
     const [h, m] = activeTime.split(':');
-    let start = new Date(); start.setHours(parseInt(h), parseInt(m), 0);
+    let start = new Date();
+    start.setHours(parseInt(h), parseInt(m), 0, 0);
+
     const fmt = d => d.toISOString().replace(/-|:|\.\d+/g, '');
-    const icsData = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:Автобус 283\nDTSTART:${fmt(start)}\nDTEND:${fmt(new Date(start.getTime()+1800000))}\nEND:VEVENT\nEND:VCALENDAR`;
-    const url = URL.createObjectURL(new Blob([icsData], { type: 'text/calendar' }));
-    const a = document.createElement('a'); a.href = url; a.download = 'bus283.ics'; a.click();
+    const end = new Date(start.getTime() + 30 * 60000);
+
+    const icsData = [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'BEGIN:VEVENT',
+        'SUMMARY:Автобус 283',
+        `DTSTART:${fmt(start)}`,
+        `DTEND:${fmt(end)}`,
+        'END:VEVENT',
+        'END:VCALENDAR'
+    ].join('\n');
+
+    const blob = new Blob([icsData], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'bus283.ics';
+    a.target = '_blank';
+    document.body.appendChild(a);
+    a.click();
+
+    setTimeout(() => {
+        if (document.body.contains(a)) document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }, 250);
 }
 
-function shareApp() { 
+function shareApp(event) {
+    if (event) event.stopPropagation();
     if (navigator.share) {
-        navigator.share({ title: 'Розклад 283', url: window.location.href });
-    } 
+        navigator.share({
+            title: 'Автобус 283',
+            text: 'Розклад руху автобуса 283',
+            url: window.location.href
+        }).catch(() => { });
+    }
 }
 
-window.onscroll = function() {
-    let scroll = window.pageYOffset || document.documentElement.scrollTop;
-    
-    document.documentElement.style.setProperty('--angle-1', (scroll * 2) + 'deg');
-    document.documentElement.style.setProperty('--angle-2', (scroll * -0.8) + 'deg');
-    
-    const header = document.getElementById("mainHeader");
-    if (scroll > 50) {
-        header.classList.add("scrolled");
-    } else {
-        header.classList.remove("scrolled");
+let scrollTicking = false;
+window.onscroll = function () {
+    if (!scrollTicking) {
+        window.requestAnimationFrame(() => {
+            let scroll = window.pageYOffset || document.documentElement.scrollTop;
+            document.documentElement.style.setProperty('--angle-1', (scroll * 2) + 'deg');
+            document.documentElement.style.setProperty('--angle-2', (scroll * -0.8) + 'deg');
+            const header = document.getElementById("mainHeader");
+            if (scroll > 50) {
+                if (!header.classList.contains("scrolled")) header.classList.add("scrolled");
+            } else {
+                if (header.classList.contains("scrolled")) header.classList.remove("scrolled");
+            }
+            scrollTicking = false;
+        });
+        scrollTicking = true;
     }
 };
 
-window.onload = function() {
+window.onload = function () {
     checkUpdates();
-    document.getElementById('bible-quote').innerText = bibleVerses[Math.floor(Math.random() * bibleVerses.length)];
+    const quoteEl = document.getElementById('bible-quote');
+    if (quoteEl && typeof bibleVerses !== 'undefined') {
+        quoteEl.innerText = bibleVerses[Math.floor(Math.random() * bibleVerses.length)];
+    }
     fetchWeather();
     setMode('market');
 };
