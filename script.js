@@ -97,7 +97,7 @@ function setMode(mode) {
 let activeTime = "";
 function selectTrip(time, el, event) {
     if (time === '-') return;
-    event.stopPropagation();
+    if (event) event.stopPropagation();
     activeTime = time;
 
     document.querySelectorAll('td').forEach(t => t.classList.remove('selected'));
@@ -107,14 +107,13 @@ function selectTrip(time, el, event) {
     timerBlock.classList.add('visible');
 
     const calBtn = document.getElementById('calBtn');
-    calBtn.style.display = 'inline-block';
+    if (calBtn) calBtn.style.display = 'inline-block';
 
     updateTimer(time);
 }
 
 function deselectAll(event) {
     if (event && event.target) {
-        // Якщо клікнули по кнопці поділитися, таймеру або таблиці — не закриваємо
         if (event.target.closest('#timer-block, td, .sw-btn, .share-btn, #calBtn')) {
             return;
         }
@@ -156,7 +155,9 @@ function updateTimer(time) {
 
 function addToCalendar(event) {
     if (!activeTime) return;
-    if (event) {
+    
+    // Важливо для iPhone: запобігаємо "пробиттю" кліку
+    if (event && event.cancelable) {
         event.preventDefault();
         event.stopPropagation();
     }
@@ -184,7 +185,6 @@ function addToCalendar(event) {
     const a = document.createElement('a');
     a.href = url;
     a.download = 'bus283.ics';
-    a.target = '_blank';
     document.body.appendChild(a);
     a.click();
 
