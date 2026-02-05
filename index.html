@@ -38,6 +38,8 @@
             padding: 0;
             width: 100%;
             overflow-x: hidden;
+            /* Запобігає системним коливанням на iOS */
+            touch-action: pan-y;
         }
 
         body {
@@ -127,7 +129,11 @@
             height: 65px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            /* Фіксація для iOS */
             will-change: height;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            transform: translateZ(0);
         }
 
         h1 {
@@ -334,12 +340,10 @@
             font-size: 0.85rem;
         }
 
-        /* Прибираємо лінію в останньому рядку */
         #schedule-body tr:last-child td {
             border-bottom: none;
         }
 
-        /* Прибираємо праву лінію в останній колонці */
         th:last-child,
         td:last-child {
             border-right: none;
@@ -540,37 +544,33 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Отримуємо всі інтерактивні елементи
             const interactiveElements = document.querySelectorAll('.share-btn, .sw-btn, #calBtn');
 
             interactiveElements.forEach(el => {
                 const press = (e) => {
-                    // Запобігаємо мерехтінню шапки тільки для кнопки календаря та "Поділитися"
                     if (e.type === 'touchstart' && !el.classList.contains('sw-btn')) {
                         e.preventDefault();
                     }
 
-                    // Ефект масштабування для всіх
-                    el.style.transform = 'scale(0.97)';
+                    // Додано translateZ(0) для фіксації шарів на iOS
+                    el.style.transform = 'scale(0.97) translateZ(0)';
                     el.style.transition = 'none';
 
-                    // ПІДКАЗКА: Встановлюємо колір тільки якщо це НЕ світчер
                     if (!el.classList.contains('sw-btn')) {
                         el.style.backgroundColor = 'rgba(255, 255, 255, 0.15)';
                     } else {
-                        // Для світчера явно прибираємо фон, щоб не було конфліктів
                         el.style.backgroundColor = 'transparent';
                     }
                 };
 
                 const release = (e) => {
                     setTimeout(() => {
-                        el.style.transform = '';
+                        // Повертаємо стан з апаратною акселерацією
+                        el.style.transform = 'translateZ(0)';
                         el.style.backgroundColor = '';
                         el.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s ease';
                     }, 80);
 
-                    // Виклик функцій для кнопок, де ми скасували стандартну подію
                     if (e.type === 'touchend' || e.type === 'mouseup') {
                         if (el.id === 'calBtn') {
                             if (typeof addToCalendar === 'function') addToCalendar();
@@ -580,7 +580,6 @@
                     }
                 };
 
-                // Додаємо обробники
                 el.addEventListener('touchstart', press, { passive: false });
                 el.addEventListener('touchend', release);
                 el.addEventListener('mousedown', press);
