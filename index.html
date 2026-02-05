@@ -223,6 +223,7 @@
             padding: 4px;
             border: 1px solid var(--border);
             z-index: 1;
+            overflow: hidden;
         }
 
         .sw-btn {
@@ -239,6 +240,8 @@
             transition: color 0.3s ease;
             text-transform: uppercase;
             -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            user-select: none;
             outline: none;
         }
 
@@ -337,7 +340,8 @@
         }
 
         /* Прибираємо праву лінію в останній колонці */
-        th:last-child, td:last-child {
+        th:last-child,
+        td:last-child {
             border-right: none;
         }
 
@@ -536,27 +540,49 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const interactiveElements = document.querySelectorAll('#timer-block button, .share-btn, .sw-btn');
+            // Отримуємо всі інтерактивні елементи
+            const interactiveElements = document.querySelectorAll('.share-btn, .sw-btn, #calBtn');
 
             interactiveElements.forEach(el => {
-                const press = () => {
+                const press = (e) => {
+                    // Запобігаємо мерехтінню шапки тільки для кнопки календаря та "Поділитися"
+                    if (e.type === 'touchstart' && !el.classList.contains('sw-btn')) {
+                        e.preventDefault();
+                    }
+
+                    // Ефект масштабування для всіх
                     el.style.transform = 'scale(0.97)';
-                    el.style.backgroundColor = 'rgba(255, 255, 255, 0.15)';
                     el.style.transition = 'none';
+
+                    // ПІДКАЗКА: Встановлюємо колір тільки якщо це НЕ світчер
+                    if (!el.classList.contains('sw-btn')) {
+                        el.style.backgroundColor = 'rgba(255, 255, 255, 0.15)';
+                    } else {
+                        // Для світчера явно прибираємо фон, щоб не було конфліктів
+                        el.style.backgroundColor = 'transparent';
+                    }
                 };
 
-                const release = () => {
+                const release = (e) => {
                     setTimeout(() => {
                         el.style.transform = '';
                         el.style.backgroundColor = '';
                         el.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s ease';
                     }, 80);
+
+                    // Виклик функцій для кнопок, де ми скасували стандартну подію
+                    if (e.type === 'touchend' || e.type === 'mouseup') {
+                        if (el.id === 'calBtn') {
+                            if (typeof addToCalendar === 'function') addToCalendar();
+                        } else if (el.classList.contains('share-btn')) {
+                            if (typeof shareApp === 'function') shareApp();
+                        }
+                    }
                 };
 
-                el.addEventListener('touchstart', press, { passive: true });
+                // Додаємо обробники
+                el.addEventListener('touchstart', press, { passive: false });
                 el.addEventListener('touchend', release);
-                el.addEventListener('touchmove', release);
-
                 el.addEventListener('mousedown', press);
                 el.addEventListener('mouseup', release);
                 el.addEventListener('mouseleave', release);
